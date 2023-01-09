@@ -27,4 +27,4 @@ jobs:
   GithubEnvChangeApproval:   
     name: ServiceNow Change Approval
     runs-on: ubuntu-latest
-    environemnt: prod
+    environment: prod
