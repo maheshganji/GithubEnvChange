@@ -1,15 +1,42 @@
-name: GithbuEnvChange
-on: 
-  workflow_dispatch:
+name: Test
 
+on:
+  workflow_dispatch:
+    
 jobs:
-  changeApproval:
-    name: ServiceNow Change Approval
+
+  build:
+    name: Build
     runs-on: ubuntu-latest
-    steps:     
-      - name: ServiceNow Change Approval
-        uses: ServiceNow/servicenow-devops-change@v1.34.2
-        id: create
+  
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Set Node.js 14.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: 14.x
+
+    - name: Install dependencies
+      run: npm ci
+
+      
+    - name: Compile
+      run: npm run build
+      
+  GetChangeDetails:
+    needs: build
+    runs-on: ubuntu-latest
+    name: Servicenow Get Change Details
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Servicenow Get Change Details
+        uses: ser
+
+        id: get
         with:
           devops-integration-user-name: ${{ secrets.SN_DEVOPS_USER }}
           devops-integration-user-password: ${{ secrets.SN_DEVOPS_PASSWORD }}
@@ -17,11 +44,7 @@ jobs:
           tool-id: ${{ secrets.SN_ORCHESTRATION_TOOL_ID }}
           context-github: ${{ toJSON(github) }}
           job-name: 'ServiceNow Change Approval'
-          change-request: '{"setCloseCode":"true","attributes":{"short_description":"Automated Software Deployment","assignment_group":"a715cd759f2002002920bde8132e7018","description":"Automated Software Deployment.","implementation_plan":"Software update is tested and results can be found in Test Summaries Tab; When the change is approved the implementation happens automated by the CICD pipeline within the change planned start and end time window.","backout_plan":"When software fails in production, the previous software release will be re-deployed.","test_plan":"Testing if the software was successfully deployed","devops_change":"true"}}'
-          interval: '1'
-          timeout: '3'
-  changeApproval2:
-    name: ServiceNow Change Approval2
-    runs-on: ubuntu-latest
-    environment: prod
+          change-request: '{"setCloseCode":"true","attributes":{"short_description":"Automated Software Deployment","description":"Automated Software Deployment.","assignment_group":"a715cd759f2002002920bde8132e7018","implementation_plan":"Software update is tested and results can be found in Test Summaries Tab; When the change is approved the implementation happens automated by the CICD pipeline within the change planned start and end time window.","backout_plan":"When software fails in production, the previous software release will be re-deployed.","test_plan":"Testing if the software was successfully deployed"}}'
+          interval: '100'
+          timeout: '3600'
     
