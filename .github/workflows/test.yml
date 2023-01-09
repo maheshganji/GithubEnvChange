@@ -29,3 +29,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: GithubEnvChange
     environment: prod
+    steps:
+      - name: Deployment Scripts
+        run: echo Deployment started
