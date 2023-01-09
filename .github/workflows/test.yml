@@ -5,28 +5,9 @@ on:
     
 jobs:
 
-  build:
-    name: Build
-    runs-on: ubuntu-latest
-  
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-
-    - name: Set Node.js 14.x
-      uses: actions/setup-node@v1
-      with:
-        node-version: 14.x
-
-    - name: Install dependencies
-      run: npm ci
 
       
-    - name: Compile
-      run: npm run build
-      
-  GetChangeDetails:
-    needs: build
+  GithubEnvChange:
     runs-on: ubuntu-latest
     name: Servicenow Get Change Details
 
@@ -34,8 +15,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Servicenow Get Change Details
-        uses: ser
-
+        uses: ServiceNow/servicenow-devops-change@v1.34.2
         id: get
         with:
           devops-integration-user-name: ${{ secrets.SN_DEVOPS_USER }}
