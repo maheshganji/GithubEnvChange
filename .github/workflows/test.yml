@@ -25,6 +25,7 @@ jobs:
           interval: '100'
           timeout: '3600'
   GithubEnvChangeApproval:   
-    name: ServiceNow Change Approval
+    name: GithubEnvChange
     runs-on: ubuntu-latest
+    needs: GithubEnvChange
     environment: prod
