@@ -12,7 +12,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Servicenow Env change step
-        uses: maheshganji/custom-action-get@test
+#         uses: maheshganji/custom-action-get@test
+        uses: ServiceNow/servicenow-devops-change@v1.34.2
         id: env
         with:
           devops-integration-user-name: ${{ secrets.SN_DEVOPS_USER }}
